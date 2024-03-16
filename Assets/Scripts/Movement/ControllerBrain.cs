@@ -30,9 +30,10 @@ namespace Movement
 
         private void HandleMovementInput(Vector2 input)
         {
-            if (_desiredDirection.magnitude > .001f
-                && input.magnitude < .001f)
+            if (_desiredDirection.magnitude > Mathf.Epsilon
+                && input.magnitude < Mathf.Epsilon)
             {
+                Debug.Log($"{nameof(_desiredDirection)} magnitude: {_desiredDirection.magnitude}\t{nameof(input)} magnitude: {input.magnitude}");
                 body.RequestBrake();
             }
 
