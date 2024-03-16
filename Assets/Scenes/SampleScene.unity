@@ -258,7 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 320683584}
   rigidBody: {fileID: 787377736}
-  speedParameter: speed
+  horSpeedParameter: hor_speed
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +508,7 @@ GameObject:
   - component: {fileID: 787377736}
   - component: {fileID: 787377741}
   - component: {fileID: 787377742}
+  - component: {fileID: 787377744}
   - component: {fileID: 787377743}
   m_Layer: 0
   m_Name: Character
@@ -557,7 +558,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 320683583}
-  - {fileID: 963194228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &787377741
@@ -588,7 +588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f1e81051c2e43f4cae8b9e0272d57e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brakeMultiplier: 0.5
+  brakeMultiplier: 0.75
 --- !u!136 &787377743
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -612,6 +612,20 @@ CapsuleCollider:
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
+--- !u!114 &787377744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787377734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a531d01121eb15d42b1806918c4064fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidBody: {fileID: 787377736}
+  rotationSpeed: 6
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,7 +716,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 787377740}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1783990335
 PrefabInstance:
@@ -773,6 +787,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 705507995}
+  - {fileID: 963194228}
   - {fileID: 787377740}
   - {fileID: 766182236}
   - {fileID: 244793453}
