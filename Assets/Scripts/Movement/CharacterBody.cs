@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Movement
@@ -9,10 +10,12 @@ namespace Movement
     [RequireComponent(typeof(Rigidbody))]
     public class CharacterBody : MonoBehaviour
     {
+        [SerializeField] private float brakeMultiplier = 1;
+        [SerializeField] private bool enableLog = true;
         private Rigidbody _rigidbody;
         private MovementRequest _currentMovement = MovementRequest.InvalidRequest;
         private bool _isBrakeRequested = false;
-        [SerializeField] private float brakeMultiplier = 1;
+        private readonly List<ImpulseRequest> _impulseRequests = new();
 
         private void Reset()
         {
@@ -32,15 +35,10 @@ namespace Movement
         private void FixedUpdate()
         {
             if (_isBrakeRequested)
-            {
-                _rigidbody.AddForce(-_rigidbody.velocity * brakeMultiplier, ForceMode.Impulse);
-                _isBrakeRequested = false;
-                Debug.Log($"{name}: Brake!");
-            }
-            if (!_currentMovement.IsValid()
-                || _rigidbody.velocity.magnitude >= _currentMovement.GoalSpeed)
-                return;
-            _rigidbody.AddForce(_currentMovement.GetAccelerationVector(), ForceMode.Force);
+                Break();
+
+            ManageMovement();
+            ManageImpulseRequests();
         }
 
         public void SetMovement(MovementRequest movementRequest)
@@ -51,6 +49,38 @@ namespace Movement
         public void RequestBrake()
         {
             _isBrakeRequested = true;
+        }
+
+        public void RequestImpulse(ImpulseRequest request)
+        {
+            _impulseRequests.Add(request);
+        }
+
+        private void Break()
+        {
+            _rigidbody.AddForce(-_rigidbody.velocity * brakeMultiplier, ForceMode.Impulse);
+            _isBrakeRequested = false;
+            if (enableLog)
+                Debug.Log($"{name}: Brake processed.");
+        }
+
+        private void ManageMovement()
+        {
+            var velocity = _rigidbody.velocity;
+            velocity.y = 0;
+            if (!_currentMovement.IsValid()
+                || velocity.magnitude >= _currentMovement.GoalSpeed)
+                return;
+            _rigidbody.AddForce(_currentMovement.GetAccelerationVector(), ForceMode.Force);
+        }
+
+        private void ManageImpulseRequests()
+        {
+            foreach (var request in _impulseRequests)
+            {
+                _rigidbody.AddForce(request.GetForceVector(), ForceMode.Impulse);
+            }
+            _impulseRequests.Clear();
         }
     }
 }

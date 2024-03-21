@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Movement
@@ -7,11 +6,13 @@ namespace Movement
     {
         [SerializeField] private Rigidbody rigidBody;
         [SerializeField] private float rotationSpeed = 1;
+        [SerializeField] private float minimumSpeedForRotation = 0.001f;
 
         private void Update()
         {
             var velocity = rigidBody.velocity;
-            if (velocity.magnitude < Mathf.Epsilon)
+            velocity.y = 0;
+            if (velocity.magnitude < minimumSpeedForRotation)
                 return;
             //The angle is always positive, we need to decide whether we need it to be negative or not
             var rotationAngle = Vector3.SignedAngle(transform.forward, velocity, Vector3.up);
