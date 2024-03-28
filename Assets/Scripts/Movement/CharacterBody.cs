@@ -10,12 +10,18 @@ namespace Movement
     [RequireComponent(typeof(Rigidbody))]
     public class CharacterBody : MonoBehaviour
     {
+        [SerializeField] private float maxFloorDistance = .1f;
         [SerializeField] private float brakeMultiplier = 1;
         [SerializeField] private bool enableLog = true;
+        [SerializeField] private LayerMask floorMask;
+        
         private Rigidbody _rigidbody;
         private MovementRequest _currentMovement = MovementRequest.InvalidRequest;
         private bool _isBrakeRequested = false;
         private readonly List<ImpulseRequest> _impulseRequests = new();
+        [SerializeField] private Vector3 floorCheckOffset = new Vector3(0, 0.001f, 0);
+
+        public bool IsFalling { private set; get; }
 
         private void Reset()
         {
@@ -68,10 +74,22 @@ namespace Movement
         {
             var velocity = _rigidbody.velocity;
             velocity.y = 0;
+            IsFalling = !Physics.Raycast(transform.position + floorCheckOffset,
+                                        -transform.up,
+                                        out var hit,
+                                        maxFloorDistance,
+                                        floorMask);
             if (!_currentMovement.IsValid()
                 || velocity.magnitude >= _currentMovement.GoalSpeed)
                 return;
-            _rigidbody.AddForce(_currentMovement.GetAccelerationVector(), ForceMode.Force);
+            var accelerationVector = _currentMovement.GetAccelerationVector();
+            if (!IsFalling)
+            {
+                accelerationVector = Vector3.ProjectOnPlane(accelerationVector, hit.normal);
+                Debug.DrawRay(transform.position, accelerationVector, Color.cyan);
+            }
+            Debug.DrawRay(transform.position, accelerationVector, Color.red);
+            _rigidbody.AddForce(accelerationVector, ForceMode.Force);
         }
 
         private void ManageImpulseRequests()
@@ -81,6 +99,12 @@ namespace Movement
                 _rigidbody.AddForce(request.GetForceVector(), ForceMode.Impulse);
             }
             _impulseRequests.Clear();
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(transform.position + floorCheckOffset, -transform.up * maxFloorDistance);
         }
     }
 }

@@ -258,6 +258,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 320683584}
   rigidBody: {fileID: 787377736}
+  jumpBehaviour: {fileID: 787377745}
+  body: {fileID: 787377742}
+  jumpTriggerParameter: jump
+  isFallingParameter: is_falling
   horSpeedParameter: hor_speed
 --- !u!1 &322915928
 GameObject:
@@ -359,7 +363,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.13052624, y: 0, z: 0, w: 0.9914449}
   m_LocalPosition: {x: 4.42, y: -4.9093947, z: 25.101269}
-  m_LocalScale: {x: 6, y: 1, z: 4}
+  m_LocalScale: {x: 30, y: 1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -627,6 +631,7 @@ GameObject:
   - component: {fileID: 787377744}
   - component: {fileID: 787377743}
   - component: {fileID: 787377745}
+  - component: {fileID: 787377746}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -693,7 +698,7 @@ MonoBehaviour:
   inputReader: {fileID: 766182234}
   jumpBehaviour: {fileID: 787377745}
   speed: 12
-  acceleration: 12
+  acceleration: 15
   cameraTransform: {fileID: 0}
   enableLog: 0
 --- !u!114 &787377742
@@ -708,8 +713,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f1e81051c2e43f4cae8b9e0272d57e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brakeMultiplier: 0.75
+  maxFloorDistance: 0.35
+  brakeMultiplier: 0.6
   enableLog: 0
+  floorMask:
+    serializedVersion: 2
+    m_Bits: 1
+  floorCheckOffset: {x: 0, y: 0.001, z: 0}
 --- !u!136 &787377743
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -717,7 +727,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 787377734}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a9bbde3d6372af2449c6623e3ade0041, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -730,9 +740,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.35
-  m_Height: 1.7
+  m_Height: 1.5
   m_Direction: 1
-  m_Center: {x: 0, y: 0.85, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &787377744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -765,6 +775,27 @@ MonoBehaviour:
   maxJumpQty: 2
   floorAngle: 30
   enableLog: 1
+--- !u!135 &787377746
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787377734}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.25
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1 &793280080
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +896,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.3826829, y: -0, z: -0, w: 0.9238798}
   m_LocalPosition: {x: 4.42, y: -0.84817505, z: 32.135593}
-  m_LocalScale: {x: 6, y: 1, z: 4}
+  m_LocalScale: {x: 30, y: 1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -970,7 +1001,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.258819, y: 0, z: 0, w: 0.9659259}
   m_LocalPosition: {x: 4.42, y: -3.341848, z: 28.885773}
-  m_LocalScale: {x: 6, y: 1, z: 4}
+  m_LocalScale: {x: 30, y: 1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1075,7 +1106,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.49999952, y: -0, z: -0, w: 0.86602575}
   m_LocalPosition: {x: 4.42, y: 2.4016085, z: 34.6293}
-  m_LocalScale: {x: 6, y: 1, z: 4}
+  m_LocalScale: {x: 30, y: 1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

@@ -12,6 +12,8 @@ namespace Movement
         [SerializeField] private float floorAngle = 30;
         [SerializeField] private bool enableLog = true;
 
+        public event Action onJump = delegate { };
+        public event Action onLand = delegate { };
         private void Reset()
         {
             body = GetComponent<CharacterBody>();
@@ -28,6 +30,7 @@ namespace Movement
                 Debug.Log($"{name}: jumped!");
             _currentJumpQty++;
             body.RequestImpulse(new ImpulseRequest(Vector3.up, jumpForce));
+            onJump.Invoke();
             return true;
         }
 
@@ -40,6 +43,7 @@ namespace Movement
                 _currentJumpQty = 0;
                 if (enableLog)
                     Debug.Log($"{name}: jump count reset!");
+                onLand.Invoke();
             }
 
             if (enableLog)
