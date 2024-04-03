@@ -3,7 +3,7 @@ The tasks meant for this repository are the following:
 - Create a separate class meant for movement. This class mustn't have any references to the input or visual classes.
 - Movement must be handled by physics, using rigidbody.
 - Create a separate class meant for visuals, like animations.
-- Add anymations for all actions.
+- Add animations for all actions.
 - Add, at least, the actions walk/run and jump.
 - The character must have an idle animation as it's default one.
 - Create a camera follow script (3rd person), with rotation taken in account.
